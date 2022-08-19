@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Playing with Strings</title>
+        <script type="text/javascript">
+            var words = ["python", "script", "float", "false", "coding", "program", "style"]
+
+            var word = words[Math.floor(Math.random() * words.length)];
+
+            function checker() {
+                document.getElementById("theWord").innerHTML = "<h1>" + word + "</h1>";
+                //get letter entered in text box
+                let letter = document.getElementById("guessField").value;
+                alert("The letter you entered is " + letter);
+                //check word letter by letter
+                let re = new RegExp(letter, "i");
+                
+                if (!re.test(word)) {
+                    alert("The letter is not in the random word " + word);
+                }
+                else {
+                    let positions = [];
+                    for (let i = 0; i < word.length; i++) {
+                        if (word[i] === letter.toLowerCase()) {
+                            positions.push(i);
+                        }
+                    docuemnt.getElementById("messages").innerHTML = positions.length;
+                    //docuemnt.getElementById("messages").innerHTML +=
+                    }
+                }
+            }
+
+            function init() {
+                //add event listener for input
+                document.getElementById("goButton").addEventListener("click", checker);
+            }
+
+            window.addEventListener("load", init);
+            
+        </script>
+        
+    </head>
+    <body>
+        <h1>Playing with Strings - Guess the word</h1>
+        <div id="theWord"></div>
+
+        <label for="guessField">Your guess</label>
+        <input type="text" name="guessField" id="guessField" maxlength="1" size="5">
+        <input type="button" name="goButton" id="goButton" value="Go">
+
+        <div id="messages"></div>
+    </body>
+
+</html>

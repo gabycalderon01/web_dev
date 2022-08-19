@@ -1,0 +1,21 @@
+/*label {
+    display: block;  
+    margin-top: 10px;
+ }*/
+ input  {
+    display: inline-block;
+    margin-bottom: 10px;
+ }
+
+ form {
+     border: 3px solid black;
+     padding: 5px 10px 10px;
+ }
+
+ label {
+     background-color: bisque;
+ }
+
+ span {
+     background-color: rgb(255, 255, 169);
+ }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>TippyTip Tip Calculator</title>
+        <link rel="stylesheet" type = "text/css" href ="tippytip.css">
+        <script src="tippytip.js"></script>
+    </head>
+    <body>
+        <h1>TippyTip Tip Calculator</h1>
+
+        <form id="myForm">
+            <label>Total bill: </label>
+            <input type="text" name="total" id="total" class="required"><br>
+
+            <label>Percentage of tip: </label>
+            <input type="number" name="percentage" id="percentage" class="required"><br>
+
+            <label>Are you splitting the check with other people?</label>
+            <input type="radio" name="otherPeople" id="no" class="required" checked/>No
+            <input type="radio" name="otherPeople" id="yes" />Yes<br>
+
+            <div id="numberOfPeople" >
+                <label>How many people are you splitting it with?</label>
+                <input type="number" name="numberPeople" id="numberPeople"><br>
+            </div>
+
+            <input type="button" id="submitB" name="submitB" value="Submit">
+            <input type="button" id="reset" name="reset" value="Reset">
+
+            <p>Tip result: <span id="tipResult"></span></p>
+            <p>Total bill: <span id="totalBill"></span></p>
+            <p>Total bill with tax: <span id="billWithTax"></span></p>
+
+        </form>
+    </body>
+
+
+</html>

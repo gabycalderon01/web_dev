@@ -1,0 +1,38 @@
+h1 {
+	color: red;
+	text-align: center;
+	text-shadow: 0 0 3px orange, 0 0 6px green;
+}
+
+img {
+	border-top-left-radius: 20px;
+	border-bottom-right-radius: 50px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: blue;
+    box-shadow: -5px -5px 5px;
+	animation-name: move;
+    animation-duration: 3s;
+	animation-iteration-count: infinite;
+}
+
+@keyframes move {
+   0%   { color:red; }
+   50%  { color:blue; }
+   100% { color:red; }
+}
+
+h2 {
+	font-family: Fantasy, Copperplate;
+}
+
+body {
+	background: linear-gradient(lightblue, plum);
+}
+
+a:hover {
+    font-size: 200px;
+    color: red;  
+    cursor: pointer;
+}

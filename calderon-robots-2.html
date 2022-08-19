@@ -1,0 +1,195 @@
+<!--Gabriela Calderon-->
+<!--Wordle for Robots Part 1-->
+<!--CPS 330-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wordle for Robots</title>
+        <script type="text/javascript" >
+            //create 5-bit hexadecimal word stored in a global variable
+            var word = "";
+            let hexDigits = "0123456789ABCDEF";
+            for (let i = 0; i < 5; i++) {
+                let index = Math.floor(Math.random() * (hexDigits.length));
+                word += hexDigits[index];
+            }
+
+            var guessCounter = { 
+                counter: 5,
+                get currCounter() {
+                    return this.counter;
+                    } 
+            };
+
+            //getter to update the guessCounter without using a parameter
+            Object.defineProperty(guessCounter, "decrement", {
+                get: function() {
+                    this.counter--;
+                }
+            });
+
+            function init() {
+            //initializer function that adds event listener to the button
+                document.getElementById("playButton").addEventListener("click", function() {
+                    if (guessCounter.currCounter != 0) {
+                        if (validateGuess()) {
+                            playGame();
+                        }
+                        else {
+                            window.alert("Please enter a valid guess");
+                        }
+                    }
+                    else if (guessCounter.currCounter == 0) {
+                        endGame();
+                    }
+                });
+                document.getElementById("cheatButton").addEventListener("click", function() {
+                    window.alert(word);
+                });
+                document.getElementById("newGameButton").addEventListener("click", function() {
+                    location.reload();
+                });
+                document.getElementById("clearButton").addEventListener("click", function() {
+                    localStorage.clear();
+                });
+            }
+
+            function validateGuess(e) {
+                let guessBox = (document.getElementById("guessBox").value).toUpperCase();
+
+                if (guessBox.length !== 5) {
+                    return false;
+                }
+                for (i = 0; i < guessBox.length; i++) {
+                    if (!hexDigits.includes(guessBox[i])) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function playGame() {
+                //function that plays the game
+                let guessBox = (document.getElementById("guessBox").value).toUpperCase();
+                console.log(guessBox);
+                guessCounter.decrement;
+                if (guessBox === word) {
+                    //guessCounter.decrement;
+                    document.getElementById("guessText").innerHTML += "<p>" + (5 - guessCounter.currCounter) + ")  " + guessBox + "<p>";
+                    digitsMatch(guessBox);
+                    endGame();
+                }
+                else if (guessBox !== word) {
+                    document.getElementById("guessText").innerHTML += "<p>" + (5 - guessCounter.currCounter) + ")  " + guessBox + "<p>";
+                    digitsMatch(guessBox);
+                    if (guessCounter.currCounter > 0) {
+                        //guessCounter.decrement;
+                        document.getElementById("gameState").innerHTML = "<p>You suck! >:( Try again loser!</p>";
+                        document.getElementById("numGuesses").innerHTML = "<p>You have " + guessCounter.currCounter + " guesses left!</p>";
+                    }
+                    else if (guessCounter.currCounter == 0) {
+                        //guessCounter.decrement;
+                        endGame();
+                    }
+                }
+            }
+
+            function digitsMatch(guess) {
+                let matchedPositions = ["-", "-", "-", "-", "-"];
+                for (let i = 0; i < word.length; i++) {
+                    if (guess[i] === word[i]) {
+                        matchedPositions[i] = "*";
+                        console.log(matchedPositions);
+                    }
+                    else if (word.includes(guess[i]) && !(guess[i] === word[i])) {
+                        matchedPositions[i] = "x";
+                    }
+                }
+                document.getElementById("guessText").innerHTML += matchedPositions.join("");
+            }
+            
+
+            function endGame() {
+                //function that ends the game once the user guesses correctly or guessCounter hits 0
+                let guessBox = document.getElementById("guessBox").value;
+                let matchDisplay = document.getElementById("match");
+                let prevHistory = localStorage.getItem("scoreHistory");
+                
+                if (localStorage.getItem("scoreHistory")) {
+                    let historyDisplay = document.getElementById("historyDisplay");
+                    let historyList = document.createElement("ul");
+                    historyDisplay.removeAttribute("hidden");
+                    for (i = 0; i < prevHistory.length; i++) {
+                        let li = document.createElement("li");
+                        li.appendChild(document.createTextNode(prevHistory[i]));
+                        historyList.appendChild(li);
+                    }
+
+                    historyDisplay.appendChild(historyList);
+                }
+                else {
+                    prevHistory = "";
+                }
+
+                if (guessBox === word) {
+                    matchDisplay.setAttribute("hidden", true);
+                    document.getElementById("gameState").innerHTML = "You won!";
+                    document.getElementById("numGuesses").innerHTML = "<p>You guessed the word in " + (5 - guessCounter.currCounter) + " guesses!</p>";
+                    localStorage.setItem("scoreHistory", (prevHistory += (5 - guessCounter.currCounter)));
+
+                }
+                else if (guessBox !== word) {
+                    document.getElementById("guessText").innerHTML = "<p>Your guess was incorrect!</p>";
+                    document.getElementById("gameState").innerHTML = "Game over! You lost!";
+                    document.getElementById("numGuesses").innerHTML = "You have no guesses left";
+                    localStorage.setItem("scoreHistory", (prevHistory += "L"));
+                }
+                document.getElementById("playButton").addEventListener("click", function() {
+                    window.alert("Game over!");
+                    location.reload()
+                });
+            }
+
+            window.addEventListener("load", init);
+            
+        </script>
+        <style>
+            :root {
+                background-color: rgb(97, 93, 93);
+                color: white;
+            }
+            #guessText {
+                font-family: monospace;
+                font-weight: bold;
+                font-size: large;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Wordle for Robots!</h1>
+
+        <label for="guessBox">Enter your guess: </label>
+        <input type="text" name="guessBox" id="guessBox" maxlength="5">
+        <input type="button" name="playButton" id="playButton" value="Play!">
+        <div id="guessText">
+        </div>
+        <div id="game">
+            <p id="gameState"></p>
+        </div>
+        <div id="numGuessDisplay">
+            <p id="numGuesses"></p>
+        </div>
+        <div id="match" hidden>
+            <h3>Matched letters are in positions: </h3>
+            <p id="matchedPos"></p>
+        </div>
+        <div id="scoreHistory">
+            <p id="historyDisplay" hidden >Your previous scores: </p>
+        </div>
+        <button id="cheatButton">Cheat</button>
+        <button id="newGameButton">New Game</button>
+        <button id="clearButton">Clear all scores</button>
+    </body>
+
+</html>
